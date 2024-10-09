@@ -1,0 +1,49 @@
+from rest_framework import serializers
+from .models import *
+
+class InternshipSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Internship
+        fields = ['id', 'title', 'duration', 'class_mode', 'class_hour', 'location', 'description', 'animation']
+
+
+class ServiceSerializer(serializers.ModelSerializer):
+    imageUrl = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Service
+        fields = ['id', 'title', 'imageUrl', 'animation']
+
+    def get_imageUrl(self, obj):
+        request = self.context.get('request')
+        if obj.imageUrl:
+            return request.build_absolute_uri(obj.imageUrl.url)
+        return None
+    
+
+
+class ProductImageSerializer(serializers.ModelSerializer):
+    imageUrl = serializers.ImageField(source='image', read_only=True)  # Adjusting field name
+
+    class Meta:
+        model = ProductImage
+        fields = ('id', 'title', 'imageUrl', 'description')  # Adjust field names if necessary
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    images = ProductImageSerializer(many=True, source='product_image', read_only=True)  # Related images
+    title_desc = serializers.CharField(source='title_description')  # Adjusting field name
+
+    class Meta:
+        model = Product
+        fields = (
+            'id',
+            'title',
+            'title_desc',
+            'image',
+            'long_description',  # No need for source
+            'short_description',  # No need for source
+            'images',
+            'animation',
+            'isActive',
+        )
