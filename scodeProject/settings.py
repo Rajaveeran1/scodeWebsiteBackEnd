@@ -23,10 +23,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-a85g(a6qod+%-b@+1@9iw_w==o_@%!w=r*e43_e8fs2@=btby#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
+ALLOWED_HOSTS = [
+    "scodebackend.onrender.com",
+    "www.scodesoft.com",
+    "localhost",
+    "127.0.0.1",
+    "*",
+]
 
-ALLOWED_HOSTS = ["*"]
 
 
 
@@ -56,13 +62,18 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
+# Allow all origins (for development only)
+CORS_ORIGIN_ALLOW_ALL = True  # Make sure to set this to False in production
 
+# Allow specific origins
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # or your frontend URL
+    "http://192.168.29.159:3000",  # Local development URL
+    "https://www.scodesoft.com",     # Your production frontend URL
+    "https://scodebackend.onrender.com"  # Add this if you're making requests from the same domain
 ]
 
-CORS_ALLOW_CREDENTIALS = False
+CORS_ALLOW_CREDENTIALS = True
+
 
 ROOT_URLCONF = 'scodeProject.urls'
 
