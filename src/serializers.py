@@ -33,6 +33,7 @@ class ProductImageSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, source='product_image', read_only=True)  # Related images
     title_desc = serializers.CharField(source='title_description')  # Adjusting field name
+    imageUrl = serializers.ImageField(source='image', read_only=True) 
 
     class Meta:
         model = Product
@@ -40,10 +41,17 @@ class ProductSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'title_desc',
-            'image',
+            'imageUrl',
             'long_description',  # No need for source
             'short_description',  # No need for source
             'images',
             'animation',
             'isActive',
         )
+
+
+class JobSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Job
+        fields = ['id', 'title', 'experience', 'location', 'description', 'animation']
+

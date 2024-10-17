@@ -45,7 +45,6 @@ class Internship(models.Model):
     
 
 class Job(models.Model):
-
     title = models.CharField(max_length=200)
     experience = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
