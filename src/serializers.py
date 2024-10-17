@@ -55,3 +55,11 @@ class JobSerializer(serializers.ModelSerializer):
         model = Job
         fields = ['id', 'title', 'experience', 'location', 'description', 'animation']
 
+
+class JobApplicationSerializer(serializers.ModelSerializer):
+    resume_url = serializers.ReadOnlyField()  # Expose the resume public URL
+
+    class Meta:
+        model = JobApplication
+        fields = ['name', 'email', 'phone', 'message', 'resume', 'resume_url', 'job_title']
+        read_only_fields = ['resume_url']

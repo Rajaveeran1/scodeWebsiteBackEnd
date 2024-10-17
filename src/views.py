@@ -96,3 +96,23 @@ class JobsList(APIView):
                 'success': False,
                 'message': str(e)
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+
+class JobApplicationView(APIView):
+    def post(self, request):
+        serializer = JobApplicationSerializer(data=request.data)
+        if serializer.is_valid():
+            job_application = serializer.save()
+            # Construct full URL for resume_url
+            resume_full_url = request.build_absolute_uri(job_application.resume_url)
+
+            return Response(
+                {
+                    "message": "Job application submitted successfully!",
+                    "resume_url": resume_full_url  # Return full resume URL
+                },
+                status=status.HTTP_201_CREATED
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

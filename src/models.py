@@ -62,3 +62,21 @@ class ActiveProject(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class JobApplication(models.Model):
+    name = models.CharField(max_length=255)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+    message = models.TextField()
+    resume = models.FileField(upload_to='resumes/')
+    job_title = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def resume_url(self):
+        if self.resume:
+            return self.resume.url  # This is the relative URL, we will handle full URL in the view
+        return None

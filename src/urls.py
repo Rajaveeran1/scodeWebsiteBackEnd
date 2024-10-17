@@ -7,4 +7,5 @@ urlpatterns = [
     path('active-projects/', ActiveProjectList.as_view(), name='active-project-list'),
     path('products/', ProductList.as_view(), name='products-list'),
     path('jobs/', JobsList.as_view(), name='jobs-list'),
+    path('job-application/', JobApplicationView.as_view(), name='job-application-create'),
 ]
