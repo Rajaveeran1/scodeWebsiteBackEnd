@@ -80,3 +80,42 @@ class JobApplication(models.Model):
         if self.resume:
             return self.resume.url  # This is the relative URL, we will handle full URL in the view
         return None
+
+from ckeditor.fields import RichTextField
+
+class BlogPost(models.Model):
+    title = models.CharField(max_length=200)
+    image = models.ImageField(upload_to='blog_images/')
+    content = RichTextField()  # Changed to RichTextField
+    author = models.CharField(max_length=200)
+    views = models.IntegerField(blank=True, null=True)
+    likes = models.IntegerField(blank=True, null=True)
+    authorImage = models.ImageField(
+        upload_to='author_images/',
+        default='author_images/default_author.png'  # Path to default image
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+    
+class BlogImage(models.Model):
+    blog_post = models.ForeignKey(BlogPost, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='blog_images/', null=True,blank=True)
+    caption = models.CharField(max_length=255, blank=True)
+    content =  RichTextField( null=True,blank=True)
+    # code_snippet_title = models.CharField(max_length=255, blank=True)
+    code_snippet = models.TextField(blank=True, null=True)
+    index_id = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return f"Image for {self.blog_post.title}"
+    
+class Comment(models.Model):
+    blog_comment = models.ForeignKey(BlogPost, related_name='comments', on_delete=models.CASCADE)
+    user_name = models.CharField(max_length=255, blank=True)
+    comment = models.CharField(max_length=255, blank=True)
+    
+
+    def __str__(self):
+        return f"Cpmment for {self.blog_comment.title}"

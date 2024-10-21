@@ -63,3 +63,26 @@ class JobApplicationSerializer(serializers.ModelSerializer):
         model = JobApplication
         fields = ['name', 'email', 'phone', 'message', 'resume', 'resume_url', 'job_title']
         read_only_fields = ['resume_url']
+
+
+
+class BlogImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BlogImage
+        fields = ['id', 'image', 'caption', 'content', 'code_snippet','index_id']
+
+class BlogSerializer(serializers.ModelSerializer):
+    images = BlogImageSerializer(many=True, read_only=True)  # Nesting BlogImageSerializer
+
+    class Meta:
+        model = BlogPost
+        fields = [
+            'id', 'title', 'image', 'author', 'content','views','likes', 
+            'authorImage', 'created_at', 'images'
+        ]
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['id', 'blog_comment', 'user_name', 'comment']

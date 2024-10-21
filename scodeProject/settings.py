@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'src',
     'rest_framework',
     "corsheaders",
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -171,3 +172,20 @@ JAZZMIN_SETTINGS = {
     "search_model": "auth.User",
 }
 
+
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',  # Or customize the toolbar below
+        'height': 300,
+        'width': '100%',
+        'extraAllowedContent': 'ul li ol',  # Ensure lists are allowed
+        'forcePasteAsPlainText': False,  # Allow rich text pasting
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline'],
+            ['NumberedList', 'BulletedList'],  # Add list buttons to toolbar
+            ['Link', 'Unlink'],
+            ['RemoveFormat', 'Source'],
+        ],
+    }
+}

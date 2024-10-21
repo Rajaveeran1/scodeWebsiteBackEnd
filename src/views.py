@@ -116,3 +116,133 @@ class JobApplicationView(APIView):
                 status=status.HTTP_201_CREATED
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+    
+class BlogList(APIView):
+    def get(self, request, format=None):
+        try:
+            blogs = BlogPost.objects.prefetch_related('images').all()  # Optimize query with prefetch_related
+            serializer = BlogSerializer(blogs, many=True, context={'request': request})
+            return Response({
+                'success': True,
+                'message': 'Blogs retrieved successfully.',
+                'data': serializer.data
+            }, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({
+                'success': False,
+                'message': str(e)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+
+class CommentView(APIView):
+    def post(self, request):
+        blog_comment_id = request.data.get('blog_comment')
+
+        if not blog_comment_id:
+            return Response(
+                {"success": False, "message": "Blog comment ID is required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(blog_comment_id=blog_comment_id)
+            
+            return Response(
+                {
+                    'success': True,
+                    "message": "Comment added successfully!",
+                    'data':serializer.data
+                },
+                status=status.HTTP_201_CREATED
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+class CommentList(APIView):
+
+    def get(self, request, blog_post_id=None, format=None):
+        try:
+            # Check if a blog_post_id was provided
+            if blog_post_id:
+                # Retrieve comments for the specific blog post
+                comments = Comment.objects.filter(blog_comment_id=blog_post_id)
+            else:
+                # Retrieve all comments if no blog_post_id is provided
+                comments = Comment.objects.all()
+
+            serializer = CommentSerializer(comments, many=True, context={'request': request})
+            return Response({
+                'success': True,
+                'message': 'Comments retrieved successfully.',
+                'data': serializer.data
+            }, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({
+                'success': False,
+                'message': str(e)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+
+
+class LikeView(APIView):
+    def post(self, request, blog_post_id):
+        try:
+            blog_post = BlogPost.objects.get(id=blog_post_id)
+            # Increment the likes
+            if blog_post.likes is None:
+                blog_post.likes = 0
+            blog_post.likes += 1
+            blog_post.save()
+
+            return Response(
+                {
+                    'success': True,
+                    'message': 'Like added successfully!',
+                    'likes': blog_post.likes
+                },
+                status=status.HTTP_200_OK
+            )
+        except BlogPost.DoesNotExist:
+            return Response(
+                {'success': False, 'message': 'Blog post not found.'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response(
+                {'success': False, 'message': str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+
+class ViewCountView(APIView):
+    def post(self, request, blog_post_id):
+        try:
+            blog_post = BlogPost.objects.get(id=blog_post_id)
+            # Increment the views
+            if blog_post.views is None:
+                blog_post.views = 0
+            blog_post.views += 1
+            blog_post.save()
+
+            return Response(
+                {
+                    'success': True,
+                    'message': 'View count updated successfully!',
+                    'views': blog_post.views
+                },
+                status=status.HTTP_200_OK
+            )
+        except BlogPost.DoesNotExist:
+            return Response(
+                {'success': False, 'message': 'Blog post not found.'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response(
+                {'success': False, 'message': str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
