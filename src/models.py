@@ -1,4 +1,52 @@
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, Group, Permission
 from django.db import models
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, username, phone, **extra_fields):
+        if not username:
+            raise ValueError("The Username field is required.")
+        if not phone:
+            raise ValueError("The Phone field is required.")
+        
+        user = self.model(username=username, phone=phone, **extra_fields)
+        user.save(using=self._db)
+        return user
+
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    username = models.CharField(max_length=150, unique=True)
+    phone = models.CharField(max_length=15, unique=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    
+    groups = models.ManyToManyField(
+        Group,
+        related_name='customuser_set',  # Add a unique related_name
+        blank=True
+    )
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_name='customuser_set',  # Add a unique related_name
+        blank=True
+    )
+
+    objects = CustomUserManager()
+
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['phone']
+
+    def __str__(self):
+        return self.username
+
+
+
+class QuestionAndAnswer(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='users')
+    question = models.CharField(max_length=255)
+    Answer = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.user.username
+
 
 class Service(models.Model):
     title = models.CharField(max_length=200)

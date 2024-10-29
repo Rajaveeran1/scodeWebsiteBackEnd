@@ -86,3 +86,30 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ['id', 'blog_comment', 'user_name', 'comment']
+
+
+class UserRegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'phone']
+
+    def validate_phone(self, value):
+        if CustomUser.objects.filter(phone=value).exists():
+            raise serializers.ValidationError("Phone number is already registered.")
+        return value
+
+    def create(self, validated_data):
+        # Create user without a password (this may have security implications)
+        return CustomUser.objects.create(**validated_data)
+    
+
+class QuestionAndAnswerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = QuestionAndAnswer
+        fields = ['user', 'question', 'Answer']
+
+    def validate_user(self, value):
+        # Optionally, validate that the user exists
+        if not CustomUser.objects.filter(id=value.id).exists():
+            raise serializers.ValidationError("User does not exist.")
+        return value

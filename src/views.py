@@ -3,6 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import *
 from .serializers import *
+        
+from django.contrib.auth import login
 
    
 class InternshipList(APIView):
@@ -246,3 +248,71 @@ class ViewCountView(APIView):
                 {'success': False, 'message': str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+
+
+class UserRegisterView(APIView):
+    def post(self, request):
+        # Extract the username and phone from the request data
+        username = request.data.get('username')
+        phone = request.data.get('phone')
+
+        # Check if the user already exists
+        user = CustomUser.objects.filter(username=username, phone=phone).first()
+        
+        if user:
+            # User exists, log them in
+            login(request, user)  # Log the user in
+            return Response({
+                'success': True,
+                'message': 'Logged in successfully.',
+                'data': {
+                    'id':user.id,
+                    'username': user.username,
+                    'phone': user.phone,
+                   
+
+                }
+            }, status=status.HTTP_200_OK)
+        
+        # User does not exist, create a new user
+        serializer = UserRegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            login(request, user)  # Log the new user in
+            return Response({
+                'success': True,
+                'message': 'Registered successfully and logged in.',
+                'data': {
+                    'id':user.id,
+                    'username': user.username,
+                    'phone': user.phone,
+                }
+            }, status=status.HTTP_201_CREATED)
+
+        return Response({
+            'success': False,
+            'message': 'Registration failed.',
+            'data': serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+class QuestionAndAnswerView(APIView):
+    def post(self, request):
+        print("Incoming request data:", request.data)
+        serializer = QuestionAndAnswerSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                'success': True,
+                'message': 'Question and answer saved successfully.',
+                'data': serializer.data
+            }, status=status.HTTP_201_CREATED)
+        
+        return Response({
+            'success': False,
+            'message': 'Failed to save question and answer.',
+            'data': serializer.errors
+        }, status=status.HTTP_400_BAD_REQUEST)

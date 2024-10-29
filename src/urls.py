@@ -13,4 +13,8 @@ urlpatterns = [
     path('comments/<int:blog_post_id>/', CommentList.as_view(), name='comment_list_by_blog'),
     path('posts/<int:blog_post_id>/like/', LikeView.as_view(), name='like_blog_post'),
     path('posts/<int:blog_post_id>/view/', ViewCountView.as_view(), name='view_blog_post'),
+
+    path('register/', UserRegisterView.as_view(), name='user-register'),
+    
+    path('qa/', QuestionAndAnswerView.as_view(), name='question_and_answer'),
 ]
