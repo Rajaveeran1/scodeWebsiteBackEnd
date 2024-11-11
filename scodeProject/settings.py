@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-a85g(a6qod+%-b@+1@9iw_w==o_@%!w=r*e43_e8fs2@=btby#
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "scodebackend.onrender.com",
+    "api.scodesoft.com",
     "www.scodesoft.com",
     "localhost",
     "127.0.0.1",
@@ -40,6 +40,7 @@ ALLOWED_HOSTS = [
 
 INSTALLED_APPS = [
     'jazzmin',
+    'ckeditor',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -49,7 +50,7 @@ INSTALLED_APPS = [
     'src',
     'rest_framework',
     "corsheaders",
-    'ckeditor',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -75,6 +76,7 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ALLOW_CREDENTIALS = True
 
+CKEDITOR_UPLOAD_PATH = 'uploads/ckeditor/'
 
 ROOT_URLCONF = 'scodeProject.urls'
 
@@ -174,18 +176,36 @@ JAZZMIN_SETTINGS = {
 
 
 
+# CKEDITOR_CONFIGS = {
+#     'default': {
+#         'toolbar': 'full',  # Or customize the toolbar below
+#         'height': 300,
+#         'width': '100%',
+#         'extraAllowedContent': 'ul li ol',  # Ensure lists are allowed
+#         'forcePasteAsPlainText': False,  # Allow rich text pasting
+#         'toolbar_Custom': [
+#             ['Bold', 'Italic', 'Underline'],
+#             ['NumberedList', 'BulletedList'],  # Add list buttons to toolbar
+#             ['Link', 'Unlink'],
+#             ['RemoveFormat', 'Source'],
+#         ],
+#     }
+# }
+
 CKEDITOR_CONFIGS = {
     'default': {
-        'toolbar': 'full',  # Or customize the toolbar below
+        'toolbar': 'full',
         'height': 300,
         'width': '100%',
-        'extraAllowedContent': 'ul li ol',  # Ensure lists are allowed
-        'forcePasteAsPlainText': False,  # Allow rich text pasting
+        'extraAllowedContent': 'ul li ol',
+        'forcePasteAsPlainText': False,
         'toolbar_Custom': [
             ['Bold', 'Italic', 'Underline'],
-            ['NumberedList', 'BulletedList'],  # Add list buttons to toolbar
+            ['NumberedList', 'BulletedList'],
             ['Link', 'Unlink'],
             ['RemoveFormat', 'Source'],
         ],
-    }
+        # Add configuration for media_url handling
+        'filebrowserUploadUrl': '/ckeditor/upload/',  # Path for file uploads (ensure this URL is correct)
+    },
 }

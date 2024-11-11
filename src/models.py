@@ -157,7 +157,7 @@ class BlogImage(models.Model):
     index_id = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
-        return f"Image for {self.blog_post.title}"
+        return f"Image for {self.blog_post.title} indexID {self.index_id}"
     
 class Comment(models.Model):
     blog_comment = models.ForeignKey(BlogPost, related_name='comments', on_delete=models.CASCADE)
