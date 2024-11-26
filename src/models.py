@@ -136,6 +136,7 @@ class BlogPost(models.Model):
     image = models.ImageField(upload_to='blog_images/')
     content = RichTextField()  # Changed to RichTextField
     author = models.CharField(max_length=200)
+    role = models.CharField(max_length=200,blank=True, null=True)
     views = models.IntegerField(blank=True, null=True)
     likes = models.IntegerField(blank=True, null=True)
     authorImage = models.ImageField(

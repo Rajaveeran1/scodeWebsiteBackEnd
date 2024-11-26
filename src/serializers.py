@@ -78,7 +78,7 @@ class BlogSerializer(serializers.ModelSerializer):
         model = BlogPost
         fields = [
             'id', 'title', 'image', 'author', 'content','views','likes', 
-            'authorImage', 'created_at', 'images'
+            'authorImage', 'created_at', 'images','role'
         ]
 
 
