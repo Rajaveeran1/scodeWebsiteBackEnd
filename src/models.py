@@ -111,7 +111,6 @@ class ActiveProject(models.Model):
     def __str__(self):
         return self.title
 
-
 class JobApplication(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField()
@@ -119,16 +118,18 @@ class JobApplication(models.Model):
     message = models.TextField()
     resume = models.FileField(upload_to='resumes/')
     job_title = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)  # Automatically set on creation
+    updated_at = models.DateTimeField(auto_now=True)      # Automatically updated on save
 
     def __str__(self):
-        return self.name
+        return f"{self.name} (Applied on {self.created_at.strftime('%Y-%m-%d')})"
 
     @property
     def resume_url(self):
         if self.resume:
-            return self.resume.url  # This is the relative URL, we will handle full URL in the view
+            return self.resume.url  # This is the relative URL; handle full URL in the view
         return None
-
+    
 from ckeditor.fields import RichTextField
 
 class BlogPost(models.Model):
