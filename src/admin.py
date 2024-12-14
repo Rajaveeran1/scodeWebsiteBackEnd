@@ -3,7 +3,7 @@ from django.contrib.auth.models import Group, User
 
 from .models import (Internship, Job, Service, Product, ProductImage,
                      JobApplication,BlogPost,BlogImage,CustomUser,
-                     QuestionAndAnswer)
+                     QuestionAndAnswer,Banner)
 
 # Unregister the default Group and User models from the admin
 admin.site.unregister(Group)
@@ -20,6 +20,8 @@ admin.site.register(BlogPost)
 admin.site.register(BlogImage)
 admin.site.register(CustomUser)
 admin.site.register(QuestionAndAnswer)
+admin.site.register(Banner)
+
 
 
 

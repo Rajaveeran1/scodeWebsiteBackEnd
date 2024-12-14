@@ -316,3 +316,48 @@ class QuestionAndAnswerView(APIView):
             'message': 'Failed to save question and answer.',
             'data': serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class BannerList(APIView):
+
+    def get(self, request, format=None):
+        try:
+            banners = Banner.objects.filter(isActive=True)
+            serializer = BannerSerializer(banners, many=True, context={'request': request})
+            return Response({
+                'success': True,
+                'message': 'Banners retrieved successfully.',
+                'data': serializer.data
+            }, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({
+                'success': False,
+                'message': str(e)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)    
+        
+
+class BannerDetail(APIView):
+
+    def get(self, request, pk, format=None):
+        try:
+            # Retrieve a single banner by its primary key
+            banner = Banner.objects.get(isActive=True,pk=pk)
+            serializer = BannerSerializer(banner, context={'request': request})
+            return Response({
+                'success': True,
+                'message': 'Banner retrieved successfully.',
+                'data': serializer.data
+            }, status=status.HTTP_200_OK)
+        except Banner.DoesNotExist:
+            # Handle the case where the banner does not exist
+            return Response({
+                'success': False,
+                'message': 'Banner not found.'
+            }, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            # Handle any other unexpected exceptions
+            return Response({
+                'success': False,
+                'message': str(e)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+

@@ -113,3 +113,9 @@ class QuestionAndAnswerSerializer(serializers.ModelSerializer):
         if not CustomUser.objects.filter(id=value.id).exists():
             raise serializers.ValidationError("User does not exist.")
         return value
+
+
+class BannerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Banner
+        fields = ['id', 'title', 'image']
