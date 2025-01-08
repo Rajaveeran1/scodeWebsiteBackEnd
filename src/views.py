@@ -124,7 +124,7 @@ class JobApplicationView(APIView):
 class BlogList(APIView):
     def get(self, request, format=None):
         try:
-            blogs = BlogPost.objects.prefetch_related('images').all()  # Optimize query with prefetch_related
+            blogs = BlogPost.objects.prefetch_related('images').all().order_by('-created_at')  # Optimize query with prefetch_related
             serializer = BlogSerializer(blogs, many=True, context={'request': request})
             return Response({
                 'success': True,
