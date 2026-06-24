@@ -70,9 +70,12 @@ CORS_ORIGIN_ALLOW_ALL = True  # Make sure to set this to False in production
 
 # Allow specific origins
 CORS_ALLOWED_ORIGINS = [
-    "http://192.168.29.159:3000",  # Local development URL
-    "https://www.scodesoft.com",     # Your production frontend URL
-    "https://scodebackend.onrender.com"  # Add this if you're making requests from the same domain
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://192.168.29.159:3000",
+    "https://www.scodesoft.com",
+    "https://scodesoft.com",
+    "https://scodebackend.onrender.com",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
