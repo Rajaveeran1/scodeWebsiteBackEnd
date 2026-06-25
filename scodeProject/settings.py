@@ -66,7 +66,7 @@ MIDDLEWARE = [
 ]
 
 # Allow all origins (for development only)
-CORS_ORIGIN_ALLOW_ALL = True  # Make sure to set this to False in production
+CORS_ORIGIN_ALLOW_ALL = False
 
 # Allow specific origins
 CORS_ALLOWED_ORIGINS = [
@@ -162,6 +162,9 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 # Media files settings
 MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024   # 10MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024   # 10MB
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
